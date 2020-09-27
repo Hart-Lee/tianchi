@@ -91,4 +91,3 @@ for input_dir_file_name in input_dir_files:
             if per_dict[0] == " ":
                 continue
             result_file.write(per_dict[0] + " " + per_dict[1] + "\n")
-    sys.exit()
