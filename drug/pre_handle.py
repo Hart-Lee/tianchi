@@ -88,6 +88,25 @@ for input_dir_file_name in input_dir_files:
                 result_index += 1
             ann_per_line = ann_file.readline()
         for per_dict in file_content_dict:
-            if per_dict[0] == " ":
-                continue
+            # if per_dict[0] == " ":
+            #     continue
             result_file.write(per_dict[0] + " " + per_dict[1] + "\n")
+        ann_file.close()
+        txt_file.close()
+        result_file.close()
+
+final_result_file_name = "result" + OUTPUT_PATH_SUFFIX
+final_result_file_path = os.path.join(output_dir, final_result_file_name)
+final_result_file = codecs.open(final_result_file_path, "w+", encoding="UTF-8")
+output_dir_files = os.listdir(output_dir)
+for output_dir_file_name in output_dir_files:
+    output_dir_file_path = os.path.join(output_dir, output_dir_file_name)
+    if output_dir_file_path.endswith(".txt") and not output_dir_file_path.endswith(final_result_file_name):
+        print(output_dir_file_path)
+        result_file = codecs.open(output_dir_file_path, "r", encoding="utf-8")
+        per_line = result_file.readline()
+        while per_line != "":
+            final_result_file.write(per_line)
+            per_line = result_file.readline()
+        result_file.close()
+final_result_file.close()
