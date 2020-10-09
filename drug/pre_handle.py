@@ -95,18 +95,59 @@ for input_dir_file_name in input_dir_files:
         txt_file.close()
         result_file.close()
 
-final_result_file_name = "result" + OUTPUT_PATH_SUFFIX
-final_result_file_path = os.path.join(output_dir, final_result_file_name)
-final_result_file = codecs.open(final_result_file_path, "w+", encoding="UTF-8")
 output_dir_files = os.listdir(output_dir)
+cnt = len(output_dir_files)
+first_cnt = cnt * 0.8
+second_cnt = cnt * 0.9
+index = 0
+
+final_result_train_file_name = "result_train" + OUTPUT_PATH_SUFFIX  # 训练集
+final_result_val_file_name = "result_val" + OUTPUT_PATH_SUFFIX  # 验证集
+final_result_test_file_name = "result_test" + OUTPUT_PATH_SUFFIX  # 测试集
+final_result_file_train_path = os.path.join(output_dir, final_result_train_file_name)
+final_result_file_val_path = os.path.join(output_dir, final_result_val_file_name)
+final_result_file_test_path = os.path.join(output_dir, final_result_test_file_name)
+final_result_train_file = codecs.open(final_result_file_train_path, "w+", encoding="UTF-8")
+final_result_val_file = codecs.open(final_result_file_val_path, "w+", encoding="UTF-8")
+final_result_test_file = codecs.open(final_result_file_test_path, "w+", encoding="UTF-8")
+
 for output_dir_file_name in output_dir_files:
     output_dir_file_path = os.path.join(output_dir, output_dir_file_name)
-    if output_dir_file_path.endswith(".txt") and not output_dir_file_path.endswith(final_result_file_name):
-        print(output_dir_file_path)
+    if output_dir_file_path.endswith(".txt") and not output_dir_file_path.endswith(
+            final_result_train_file_name) and not output_dir_file_path.endswith(
+            final_result_val_file_name) and not output_dir_file_path.endswith(
+            final_result_test_file_name) and index < first_cnt:
         result_file = codecs.open(output_dir_file_path, "r", encoding="utf-8")
         per_line = result_file.readline()
         while per_line != "":
-            final_result_file.write(per_line)
+            final_result_train_file.write(per_line)
             per_line = result_file.readline()
         result_file.close()
-final_result_file.close()
+        final_result_train_file.write("\n")
+    elif output_dir_file_path.endswith(".txt") and not output_dir_file_path.endswith(
+            final_result_train_file_name) and not output_dir_file_path.endswith(
+        final_result_val_file_name) and not output_dir_file_path.endswith(
+        final_result_test_file_name) and index >= first_cnt and index < second_cnt:
+        result_file = codecs.open(output_dir_file_path, "r", encoding="utf-8")
+        per_line = result_file.readline()
+        while per_line != "":
+            final_result_val_file.write(per_line)
+            per_line = result_file.readline()
+        result_file.close()
+        final_result_val_file.write("\n")
+    elif output_dir_file_path.endswith(".txt") and not output_dir_file_path.endswith(
+            final_result_train_file_name) and not output_dir_file_path.endswith(
+        final_result_val_file_name) and not output_dir_file_path.endswith(
+        final_result_test_file_name) and index >= second_cnt:
+        result_file = codecs.open(output_dir_file_path, "r", encoding="utf-8")
+        per_line = result_file.readline()
+        while per_line != "":
+            final_result_test_file.write(per_line)
+            per_line = result_file.readline()
+        result_file.close()
+        final_result_test_file.write("\n")
+    index += 1
+
+final_result_train_file.close()
+final_result_val_file.close()
+final_result_test_file.close()
